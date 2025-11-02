@@ -7,7 +7,7 @@ Create an opensource ADAS
 2. Install in the car : hardware solution
 3. Transfer to mini-PC into the car
 4. Extend to animal, cars, humans detection
-5. Deploy ito the car
+5. Deploy into the car
 
 
 # Some projects to investigate (wip)
