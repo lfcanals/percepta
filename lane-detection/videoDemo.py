@@ -1,3 +1,5 @@
+import numpy as np
+import sys
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 from laneDetection import LaneDetector
@@ -6,8 +8,8 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from moviepy.video.VideoClip import VideoClip
 
 
-laneLines = LaneDetector()
-clip1 = VideoFileClip("video_input.mp4")
+laneLines = LaneDetector(theta=np.pi/160,threshold=80)
+clip1 = VideoFileClip(str(sys.argv[1]))
 
 
 def make_frame(t):

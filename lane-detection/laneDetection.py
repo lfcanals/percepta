@@ -4,12 +4,12 @@ import numpy as np
 from helper import *
 
 class LaneDetector:
-    def __init__(self, rho=6, theta=np.pi/60, threshold=160):
+    def __init__(self, rho=6, theta=np.pi/60, threshold=160, min_line_len=40, max_line_gap=25):
         self.rho = rho
         self.theta = theta
         self.threshold = threshold
-        self.min_line_len = 40
-        self.max_line_gap = 25
+        self.min_line_len = min_line_len
+        self.max_line_gap = max_line_gap
 
 
     def calculateLines(self, img):
@@ -32,7 +32,6 @@ class LaneDetector:
                 threshold=self.threshold,
                 lines=np.array([]), 
                 minLineLength=self.min_line_len, maxLineGap=self.max_line_gap)
-
 
 
         # Right and left main lines detection
@@ -100,6 +99,7 @@ class LaneDetector:
         left_line_y = []
         right_line_x = []
         right_line_y = []
+        laneLines = []
         for line in lines:
             for x1, y1, x2, y2 in line:
                 slope = (y2 - y1) / (x2 - x1) # <-- Calculating the slope.
@@ -111,26 +111,26 @@ class LaneDetector:
                 else: # <-- Otherwise, right group.
                     right_line_x.extend([x1, x2])
                     right_line_y.extend([y1, y2])
-        if not right_line_y or not right_line_x or not left_line_y or not left_line_x:
-            return None
+        #if not right_line_y or not right_line_x or not left_line_y or not left_line_x:
+        #    return None
 
         min_y = int(image.shape[0] * (3 / 5)) # <-- Just below the horizon
         max_y = image.shape[0] # <-- The bottom of the image
-        poly_left = np.poly1d(np.polyfit(
-            left_line_y,
-            left_line_x,
-            deg=1
-        ))
-        left_x_start = int(poly_left(max_y))
-        left_x_end = int(poly_left(min_y))
-        poly_right = np.poly1d(np.polyfit(
-            right_line_y,
-            right_line_x,
-            deg=1
-        ))
-        right_x_start = int(poly_right(max_y))
-        right_x_end = int(poly_right(min_y))
 
-        return [[ [left_x_start, max_y, left_x_end, min_y],
-                  [right_x_start, max_y, right_x_end, min_y], ]]
+        if left_line_y and left_line_x:
+            poly_left = np.poly1d(np.polyfit(
+                left_line_y, left_line_x, deg=1))
+            left_x_start = int(poly_left(max_y))
+            left_x_end = int(poly_left(min_y))
+            laneLines.append([left_x_start, max_y, left_x_end, min_y])
+
+
+        if right_line_y and right_line_x: 
+            poly_right = np.poly1d(np.polyfit(
+                right_line_y, right_line_x, deg=1))
+            right_x_start = int(poly_right(max_y))
+            right_x_end = int(poly_right(min_y))
+            laneLines.append([right_x_start, max_y, right_x_end, min_y])
+
+        return [laneLines,]
 
