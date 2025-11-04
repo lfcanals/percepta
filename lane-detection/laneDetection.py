@@ -10,6 +10,9 @@ class LaneDetector:
         self.threshold = threshold
         self.min_line_len = min_line_len
         self.max_line_gap = max_line_gap
+        self.previousLaneLines = None
+        self.inertia = 10
+        
 
 
     def calculateLines(self, img):
@@ -36,6 +39,12 @@ class LaneDetector:
 
         # Right and left main lines detection
         laneLines = self.detectLaneLine(lines, img)
+        if self.previousLaneLines:
+            if not laneLines[0]: laneLines[0] = self.previousLaneLines[0]
+            if not laneLines[1]: laneLines[1] = self.previousLaneLines[1]
+
+        self.previousLaneLines = laneLines
+
         if not laneLines:
             return img, None
 
@@ -79,8 +88,12 @@ class LaneDetector:
             (img.shape[0], img.shape[1], img.shape[2]), dtype=np.uint8,)
         # Loop over all lines and draw them on the blank image.
         for line in lines:
-            for x1, y1, x2, y2 in line:
-                cv2.line(line_img, (x1, y1), (x2, y2), color, thickness)
+            if not line: continue
+            x1 = int(line[0])
+            y1 = int(line[1])
+            x2 = int(line[2])
+            y2 = int(line[3])
+            cv2.line(line_img, (x1, y1), (x2, y2), color, thickness)
         # Merge the image with the lines onto the original.
         img = cv2.addWeighted(img, 0.8, line_img, 1.0, 0.0)
         # Return the modified image.
@@ -99,7 +112,7 @@ class LaneDetector:
         left_line_y = []
         right_line_x = []
         right_line_y = []
-        laneLines = []
+        laneLines = [None, None]
         for line in lines:
             for x1, y1, x2, y2 in line:
                 slope = (y2 - y1) / (x2 - x1) # <-- Calculating the slope.
@@ -122,7 +135,15 @@ class LaneDetector:
                 left_line_y, left_line_x, deg=1))
             left_x_start = int(poly_left(max_y))
             left_x_end = int(poly_left(min_y))
-            laneLines.append([left_x_start, max_y, left_x_end, min_y])
+
+            # Inertia of previous line
+            if self.previousLaneLines and self.previousLaneLines[0]:
+                left_x_start = (left_x_start + 
+                    self.inertia*self.previousLaneLines[0][0])/(self.inertia+1)
+                left_x_end = (left_x_end + 
+                    self.inertia*self.previousLaneLines[0][2])/(self.inertia+1)
+
+            laneLines[0] = [left_x_start, max_y, left_x_end, min_y]
 
 
         if right_line_y and right_line_x: 
@@ -130,7 +151,15 @@ class LaneDetector:
                 right_line_y, right_line_x, deg=1))
             right_x_start = int(poly_right(max_y))
             right_x_end = int(poly_right(min_y))
-            laneLines.append([right_x_start, max_y, right_x_end, min_y])
 
-        return [laneLines,]
+            # Inertia of previous line
+            if self.previousLaneLines and self.previousLaneLines[1]:
+                right_x_start = (right_x_start + 
+                    self.inertia * self.previousLaneLines[1][0])/(self.inertia+1)
+                right_x_end = (right_x_end + 
+                    self.inertia* self.previousLaneLines[1][2])/(self.inertia+1)
+
+            laneLines[1] = [right_x_start, max_y, right_x_end, min_y]
+
+        return laneLines
 
