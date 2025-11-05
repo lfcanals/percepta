@@ -106,13 +106,13 @@ class LaneDetector:
     # TODO: parametrize!!!
     #
     def detectLaneLine(self, lines, image):
-        if lines is None: return None
 
         left_line_x = []
         left_line_y = []
         right_line_x = []
         right_line_y = []
         laneLines = [None, None]
+        if lines is None: return laneLines
         for line in lines:
             for x1, y1, x2, y2 in line:
                 slope = (y2 - y1) / (x2 - x1) # <-- Calculating the slope.
