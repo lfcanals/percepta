@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import cv2
 import numpy as np
-from helper import *
+import math
+#from helper import *
 
 class LaneDetector:
     def __init__(self, rho=6, theta=np.pi/60, threshold=160, min_line_len=40, max_line_gap=25):
