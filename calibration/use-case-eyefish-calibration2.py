@@ -9,15 +9,19 @@ calibration = EyeFishCalibration(7, 7)
 
 IMAGES_FOLDER = "test/calibration_chess/*.jpg"
 imageNames = glob.glob(IMAGES_FOLDER)
+i = 0
 images = []
 for imageFile in imageNames:
     #print(imageFile)
     img = cv2.imread(imageFile)
     images.append(img)
+    if len(images)>10:
+        K, D, error = calibration.calculateParameters(images, imageNames)
+        images = []
 
-K, D, error = calibration.calculateParameters(images, imageNames)
 
-
+if len(images)>0:
+    K, D, error = calibration.calculateParameters(images, imageNames)
 print("error:", error)
 print("K =\n", K)
 print("D =\n", D)
