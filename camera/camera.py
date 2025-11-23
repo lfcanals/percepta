@@ -10,9 +10,7 @@ class Camera:
             ret, frame = self.cap.read()
             if not ret: break
 
-            callback(frame)
-
             # Press ESC to exit
-            if cv2.waitKey(1) & 0xFF == 27: break
+            if callback(frame) == -1 or cv2.waitKey(1) & 0xFF == 27: break
 
         self.cap.release()

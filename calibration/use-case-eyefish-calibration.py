@@ -11,11 +11,10 @@ IMAGES_FOLDER = "test/calibration_chess/*.jpg"
 imageNames = glob.glob(IMAGES_FOLDER)
 images = []
 for imageFile in imageNames:
-    #print(imageFile)
     img = cv2.imread(imageFile)
     images.append(img)
 
-K, D, error = calibration.calculateParameters(images, imageNames)
+K, D, error = calibration.runAll(images, imageNames)
 
 
 print("error:", error)

@@ -21,34 +21,25 @@ class EyeFishCalibration:
         self.K = None
         self.D = None
 
-
-    def calculateParameters(self, images, imageNames=None):
-        i=-1
-        for image in images:
-            i=i+1
-            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-            ret, corners = cv2.findChessboardCorners(gray, self.CHECKERBOARD,
-                    cv2.CALIB_CB_ADAPTIVE_THRESH #+ cv2.CALIB_CB_FAST_CHECK 
-                    + cv2.CALIB_CB_NORMALIZE_IMAGE)
-
-            if ret:
-                corners_refined = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1),
-                        criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 
-                        30, 0.001))
-                corners_norm = self.normalize_chessboard(corners_refined)
-                self.imgpoints.append(corners_refined)
-                self.objpoints.append(self.objp.copy())
-
-            else:
-                if(imageNames != None) : print(f'Discarded {imageNames[i]}')
+        self.img_shape = None
 
 
+    
+    def refine(self, cornersList):
+        """
+        Refine incrementally the parameters using the given corners list.
 
+        Args:
+            cornersList (list of result of cv2.findChessboardCorners):
 
-        N_OK = len(self.objpoints)
-        print(f"Using {N_OK} valid images of {len(images)}")
+        Return:
+            [K, D, error] resulting of calibration
 
-        img_shape = gray.shape[::-1]
+        """
+        for corners in cornersList:
+            corners_norm = self.normalize_chessboard(corners)
+            self.imgpoints.append(corners_norm)
+            self.objpoints.append(self.objp.copy())
 
         flags = (cv2.fisheye.CALIB_RECOMPUTE_EXTRINSIC +
                  #cv2.fisheye.CALIB_CHECK_COND +
@@ -57,17 +48,61 @@ class EyeFishCalibration:
         if self.K is not None:
              flags |= cv2.fisheye.CALIB_USE_INTRINSIC_GUESS
 
-        #print("OBJ", objpoints[0].shape, objpoints[0].dtype)
-        #print("IMG", imgpoints[0].shape, imgpoints[0].dtype)
-
         rvecs = []
         tvecs = []
-        rms, _, _, _, _ = cv2.fisheye.calibrate(
-                self.objpoints, self.imgpoints, img_shape, self.K, self.D, 
+        rms, K, D, rvecs, tvecs = cv2.fisheye.calibrate(
+                self.objpoints, self.imgpoints, self.img_shape, self.K, self.D, 
                 rvecs, tvecs, flags,
                 (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 1e-6))
 
+        self.K = K
+        self.D = D
+
         return [self.K, self.D, rms]
+
+
+
+    def findChessboard(self, image):
+        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        if self.img_shape == None: self.img_shape = gray.shape[::-1]
+
+        ret, corners = cv2.findChessboardCorners(gray, self.CHECKERBOARD,
+                    cv2.CALIB_CB_ADAPTIVE_THRESH #+ cv2.CALIB_CB_FAST_CHECK 
+                    + cv2.CALIB_CB_NORMALIZE_IMAGE)
+        if ret:
+            corners = cv2.cornerSubPix(gray, corners, (11,11), (-1,-1),
+                        criteria=(cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 
+                        30, 0.001))
+
+        return ret, corners
+
+
+
+    def runAll(self, images, imageNames=None):
+        """
+        Gets chessboard from images and uses them to calibrate incrementally the model.
+
+        Args:
+            images (list of CV2 images): photos with potentially chessboard 
+
+        Return:
+            [K, D, error] resulting of calibration
+
+        """
+        i=-1
+        cornersList = []
+        for image in images:
+            i=i+1
+            ret, corners = self.findChessboard(image)
+            if ret:
+                cornersList.append(corners)
+
+            else:
+                if(imageNames != None) : print(f'Discarded {imageNames[i]}')
+
+        return self.refine(cornersList)
+
+
 
 
     def normalize_chessboard(self, corners):

@@ -16,12 +16,12 @@ for imageFile in imageNames:
     img = cv2.imread(imageFile)
     images.append(img)
     if len(images)>10:
-        K, D, error = calibration.calculateParameters(images, imageNames)
+        K, D, error = calibration.runAll(images, imageNames)
         images = []
 
 
 if len(images)>0:
-    K, D, error = calibration.calculateParameters(images, imageNames)
+    K, D, error = calibration.runAll(images, imageNames)
 print("error:", error)
 print("K =\n", K)
 print("D =\n", D)
