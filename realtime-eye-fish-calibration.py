@@ -48,6 +48,9 @@ print(f"K={incrementalCalibration.K}");
 print(f"D={incrementalCalibration.D}");
 print(f"error={incrementalCalibration.rms}");
 
+data={}
+data['K']=incrementalCalibration.K
+data['D']=incrementalCalibration.D
 with open("calibration-camera.json", "w") as f:
     json.dump(data, f, indent=4)
 
