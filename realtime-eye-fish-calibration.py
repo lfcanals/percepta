@@ -7,6 +7,9 @@ import sys
 import json
 
 
+print("Usage:")
+print("    " + sys.argv[0] + " cameraId numImages")
+print()
 cameraId = int(sys.argv[1])
 numImages = int(sys.argv[2])
 

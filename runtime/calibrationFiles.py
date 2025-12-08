@@ -1,4 +1,5 @@
 import json
+import numpy as np
 
 
 calibrationFile = 'calibration-camera.json'

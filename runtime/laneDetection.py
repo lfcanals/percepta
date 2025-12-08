@@ -13,10 +13,9 @@ class RealtimeLaneDetection:
         self.endPointLineRight = (round(rightLine[2]), round(rightLine[3]))
         self.colorGuidelines = (255, 255, 255) # White
 
-        print("Images are NOT flip!!! Change the code to flip it")
 
     def process(self, frame):
-        flipped = frame #cv2.flip(frame, -1)  # upside-down and left-righ
+        flipped = cv2.flip(frame, -1)  # upside-down and left-righ
 
         recImg = self.rectifier.rectify(flipped)
         laneImgs, lanesLines = self.laneDetector.calculateLines(recImg)

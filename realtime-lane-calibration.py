@@ -9,6 +9,10 @@ import json
 import numpy as np
 
 
+print("Usage:")
+print("    " + sys.argv[0] + " cameraId left|right")
+print()
+print("Press ESC when the car is ON the line")
 
 cameraId = int(sys.argv[1])
 leftOrRight = sys.argv[2]

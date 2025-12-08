@@ -5,7 +5,8 @@ import math
 #from helper import *
 
 class LaneDetector:
-    def __init__(self, rho=6, theta=np.pi/60, threshold=160, min_line_len=40, max_line_gap=25):
+    def __init__(self, debug = False, \
+                rho=6, theta=np.pi/60, threshold=160, min_line_len=40, max_line_gap=25):
         self.rho = rho
         self.theta = theta
         self.threshold = threshold
@@ -13,6 +14,7 @@ class LaneDetector:
         self.max_line_gap = max_line_gap
         self.previousLaneLines = None
         self.inertia = 10
+        self.debug = debug
         
 
 
@@ -23,16 +25,20 @@ class LaneDetector:
                 laneLines : vector of line left and right
         """
         # Detect edges : Canny Transformation
+        h, w = img.shape[:2]
+
         cannyed_image = cv2.Canny(cv2.cvtColor(img, cv2.COLOR_RGB2GRAY), 100, 200)
-        #plt.imshow(cannyed_image)
-        #plt.show()
+        if self.debug :
+            cv2.imshow("process level 1", \
+                    cv2.resize(cannyed_image, (w // 2, h // 2), interpolation=cv2.INTER_AREA))
 
 
         # Define region of interest
         cropped_image = self.regionOfInterest(cannyed_image)
 
-        #plt.imshow(cropped_image)
-        #plt.show()
+        if self.debug : 
+            cv2.imshow("process level 2", \
+                    cv2.resize(cropped_image, (w // 2, h // 2), interpolation=cv2.INTER_AREA))
 
 
         # Line detection: Hough Transformation
