@@ -1,4 +1,4 @@
-Runtime programs to get realtime information from connected camera
+Runtime objects to get realtime information from connected camera
 
 
 # Implemented features

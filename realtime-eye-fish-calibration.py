@@ -1,7 +1,7 @@
 from camera.camera import Camera
 from calibration.eyeFishCalibration import EyeFishCalibration
-from runtime.eyeFishCalibration import IncrementalCalibration
-from runtime.calibrationFiles import *
+from realtime.eyeFishCalibration import IncrementalCalibration
+from realtime.calibrationFiles import *
 import cv2
 import sys
 import json

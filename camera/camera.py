@@ -1,6 +1,17 @@
 import cv2
 
 class Camera:
+    """
+         Camera object to be used to process images.
+
+         Usage example:
+
+            def callback(frame):
+               # Do something with the frame 
+
+            cam = Camera(0)
+            cam.process(callback)
+    """
     def __init__(self, cameraId):
         self.cap = cv2.VideoCapture(cameraId)
 

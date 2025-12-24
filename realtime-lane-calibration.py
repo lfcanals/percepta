@@ -1,8 +1,8 @@
 from camera.camera import Camera
 from calibration.eyeFishRectification import EyeFishRectification
 from lanedetection.laneDetection import LaneDetector
-from runtime.borderCalibration import RealtimeLaneCalibration
-from runtime.calibrationFiles import *
+from realtime.borderCalibration import RealtimeLaneCalibration
+from realtime.calibrationFiles import *
 import cv2
 import sys
 import json

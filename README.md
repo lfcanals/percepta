@@ -10,6 +10,14 @@ Create an opensource ADAS
 5. Deploy into the car
 
 
+# Packages
+
+    * calibration: objects useful for eye fish calibration
+    * camera: object representaion of simplest camera capture
+    * lanedetection: objects useful for lane detection
+    * recording: objects useful for recording
+    * realtime: realtime objects with the developed fetures (detection, calibration, recording...)
+
 # Some projects to investigate (wip)
 
 [Depth and distance measure with images](https://github.com/zubi9/depth_and_distance_measure)
