@@ -1,6 +1,11 @@
 # In a sentence
 Create an opensource ADAS
 
+# Prepare environment
+
+    pip install flask opencv numpy
+
+
 # Main goals
 
 1. Lane detection : software solution
@@ -17,6 +22,18 @@ Create an opensource ADAS
     * lanedetection: objects useful for lane detection
     * recording: objects useful for recording
     * realtime: realtime objects with the developed fetures (detection, calibration, recording...)
+    * template: web HTML pages for web servers
+
+
+# Applications in this folder
+
+## Standalone applications
+    * realtime-camera-recording.py: recrods and shows camera
+    * realtime-mute-camera-recording.py: records camera without showing anything
+
+## Web servers
+    * web-camera: opens a server streaming the capture of the selected camera
+    
 
 # Some projects to investigate (wip)
 

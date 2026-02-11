@@ -13,12 +13,13 @@ def streamingFrames(frame):
     jpg_bytes = buffer.tobytes()
 
     return 0,(b'--frame\r\n'
-           b'Content-Type: image/jpeg\r\n\r\n' + jpg_bytes + b'\r\n')
+             b'Content-Type: image/jpeg\r\n\r\n' + jpg_bytes + b'\r\n')
 
 
 def createStreaming():
     cam = Camera(cameraId)
-    yield from cam.process(streamingFrames)
+    for frame in cam.process(streamingFrames):
+        yield frame
 
 
 
