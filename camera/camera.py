@@ -22,6 +22,8 @@ class Camera:
             if not ret: break
 
             # Press ESC to exit
-            if callback(frame) == -1 or cv2.waitKey(1) & 0xFF == 27: break
+            ret, bytesFrame = callback(frame)
+            if ret == -1 or cv2.waitKey(1) & 0xFF == 27: break
+            if not bytesFrame  == None: yield bytesFrame
 
         self.cap.release()
