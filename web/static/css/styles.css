@@ -1,0 +1,26 @@
+body {
+  font-family: Arial;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  gap: 20px;
+}
+
+.item {
+  cursor: pointer;
+  border: 3px solid transparent;
+}
+
+.item img {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+}
+
+/* highlighted item */
+.selected {
+  border-color: dodgerblue;
+}
+

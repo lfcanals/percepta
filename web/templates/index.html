@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dashboard car control</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+</head>
+
+<body>
+
+<div class="grid">
+  <div class="item front-camera" data-url="front-camera">
+    <img src="front-camera.jpg" />
+  </div>
+
+  <div class="item calibration" data-url="calibration">
+    <img src="calibration.jpg" />
+  </div>
+
+  <div class="item lane-detection" data-url="lane-detection">
+    <img src="lane-detection.jpg" />
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/navigation.js') }}"></script>
+
+</body>
+</html>
+
