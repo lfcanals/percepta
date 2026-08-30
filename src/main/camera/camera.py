@@ -23,7 +23,6 @@ class Camera:
             if not ret: break
 
             frame = cv2.flip(frame, self.flip)
-            print(1)
             callback(frame)
 
             # Press ESC to exit
