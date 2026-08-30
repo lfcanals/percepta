@@ -34,6 +34,26 @@ Create an opensource ADAS
 ## Web servers
     * web-camera: opens a server streaming the capture of the selected camera
     
+### How to start up the web server
+
+Firstable, build it with
+
+    ./build-web.sh
+
+Then run it with
+
+    ./run-web.sh cameraId
+
+Where `cameraId'  is the number of camera to use (0 for the integrated, 1 for the external...)
+    
+
+In the folder `database' the information on calibration and configuration is stored.
+To reset, clean it.
+Automatically everytime new configuration or calibration is created, the configuration
+is backed up in folder with the date.
+
+In folder `recordings' the recorder videos are stored.
+
 
 # Some projects to investigate (wip)
 

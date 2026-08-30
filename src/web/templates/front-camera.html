@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Front Camera</title>
+  <style>
+    body {
+      margin: 0;
+      background: black;
+      overflow: hidden;
+      font-family: Arial;
+    }
+
+    /* Fullscreen camera */
+    #camera {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain; /* use 'cover' if you prefer cropping */
+      background: black;
+    }
+
+    /* Overlay controls */
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px 15px;
+      border-radius: 10px;
+      text-align: center;
+      color: white;
+      object-fit:cover
+    }
+
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #status {
+      margin-top: 8px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+
+<img id="camera" src="/raw_video_feed/front-camera">
+
+<div class="controls">
+  <button onclick="enableRecording()">Enable</button>
+  <button onclick="disableRecording()">Disable</button>
+  <div id="status">Status: loading...</div>
+</div>
+
+<script>
+  async function enableRecording() {
+    await fetch('/enable_record_raw_video/front-camera');
+  }
+
+  async function disableRecording() {
+    await fetch('/disable_record_raw_video/front-camera');
+  }
+
+  async function updateStatus() {
+    try {
+      const res = await fetch('/status_record_raw_video/front-camera');
+      const data = await res.json();
+      document.getElementById('status').innerText =
+        data.recording ? "● RECORDING" : "● STOPPED";
+    } catch {
+      document.getElementById('status').innerText = "ERROR";
+    }
+  }
+
+  setInterval(updateStatus, 1000);
+  updateStatus();
+</script>
+
+</body>
+</html>
