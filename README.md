@@ -54,6 +54,26 @@ is backed up in folder with the date.
 
 In folder `recordings' the recorder videos are stored.
 
+## Calibration utilities
+
+To calibrate the camera:
+
+    ./eye-fish-calibration.sh cameraId
+
+It will take several photos of a 7x7 chessboard and save the calibration values in
+`database/cameraId/yyyymmdd.HHMMss` folder
+
+
+To select a calibration use the *interactive* tool
+
+    ./select-calibration.sh cameraId
+
+
+### How to build tools
+
+Use the script
+
+    ./build-tools.sh
 
 # Some projects to investigate (wip)
 

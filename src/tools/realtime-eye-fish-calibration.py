@@ -14,8 +14,14 @@ cameraId = int(sys.argv[1])
 numImages = int(sys.argv[2])
 
 cam = Camera(cameraId, -1)
-incrementalCalibration = IncrementalCalibration(EyeFishCalibration(7,7))
-for _ in cam.process(incrementalCalibration.process): pass
+# 7x7 normal chess board
+
+incrementalCalibration = IncrementalCalibration(EyeFishCalibration(7,7), numImages)
+for result in cam.process(incrementalCalibration.process): 
+    if incrementalCalibration.K is not None: break
+
+
+
 cv2.destroyAllWindows()
 
 print(f"K={incrementalCalibration.K}");

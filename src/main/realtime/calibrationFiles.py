@@ -2,15 +2,16 @@ import json
 import numpy as np
 
 
-calibrationFile = 'calibration-camera.json'
-leftLineFile = 'lane-calibration-left.json'
-rightLineFile = 'lane-calibration-right.json'
+calibrationFile = '../database/calibration-camera.json'
+leftLineFile = '../database/lane-calibration-left.json'
+rightLineFile = '../database/lane-calibration-right.json'
 
 
 def writeEyeFishCalibration(incrementalCalibration):
     data={}
-    data['K']=incrementalCalibration.K
-    data['D']=incrementalCalibration.D
+    data = {}
+    data['K'] = incrementalCalibration.K.tolist()
+    data['D'] = incrementalCalibration.D.tolist()
     with open(calibrationFile, "w") as f:
         json.dump(data, f, indent=4)
 
@@ -28,10 +29,10 @@ def readEyeFishCalibration():
 def writeLaneLimits(leftOrRight, realtimeLaneDetection):
     data = {}
     if leftOrRight == 'left':
-        data['leftLine'] = realtimeLaneDetection.lanesLines[0];
+        data['leftLine'] = realtimeLaneDetection.lanesLines[0].toList();
         fileName = leftLineFile
     else:
-        data['rightLine'] = realtimeLaneDetection.lanesLines[1];
+        data['rightLine'] = realtimeLaneDetection.lanesLines[1].toList();
         fileName = rightLineFile
 
     with open(fileName, "w") as f:
