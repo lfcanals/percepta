@@ -9,3 +9,13 @@
             calibrations are under database/cameraId/date 
             and active date calibration is fixed in "database/cameraId/active.txt"
             choose it, or use "no-calibration" if it's not present
+
+
+Futura:     Consider a huge screen.
+            The different input cameras are using a fix square of this big screen
+            Add to the web the capacity of:
+                - recording one camera
+                - recording all cameras
+                - show all cameras -without rectification, by this moment-
+                - show only one camera (applying rectification)
+                + the descripcion of cameraId and square might be in a config file 
